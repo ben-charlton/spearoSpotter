@@ -5,25 +5,13 @@ const DiveSpotDetails: () => JSX.Element = () => {
     const [recommendation, setRecommendation] = useState<any>(null);
 
     useEffect(() => {
-        // Fetch recommended dive spot from the backend
+    
         const fetchRecommendation = async () => {
             try {
-                //const response = await fetch("/api/dive-spots/recommendation");
-                //const data = await response.json();
-                const data1 = {
-                    name: "reco",
-                    conditions: {
-                        waveHeight: 3,
-                        waterTemperature: 17,
-                        windSpeed: 4,
-                    },
-                    description: "A great dive spot with excellent conditions today!",
-                    location: {
-                        latitude: -33.8688, 
-                        longitude: 151.2093,
-                    }
-                }
-                setRecommendation(data1);
+                await new Promise(f => setTimeout(f, 1000));
+                const response = await fetch("http://localhost:5000/api/dive-spots/recommendation");
+                const data = await response.json();
+                setRecommendation(data);
             } catch (error) {
                 console.error("Error fetching recommendation:", error);
             }
