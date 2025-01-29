@@ -8,7 +8,6 @@ const DiveSpotDetails: () => JSX.Element = () => {
     
         const fetchRecommendation = async () => {
             try {
-                await new Promise(f => setTimeout(f, 1000));
                 const response = await fetch("http://localhost:5000/api/dive-spots/recommendation");
                 const data = await response.json();
                 setRecommendation(data);
