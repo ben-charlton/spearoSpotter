@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import diveSpotRoutes from "./routes/diveSpots";
+import diveSpotRoutes from "./src/routes/diveSpots";
 
 const app = express();
 
