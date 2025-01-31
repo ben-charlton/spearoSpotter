@@ -1,8 +1,8 @@
 import express from "express";
-import { getRecommendation } from "../controllers/diveSpotController";
+import { recommendDiveSpot } from "../controllers/diveSpotController";
 
 const router = express.Router();
 
-router.get("/recommendation", getRecommendation);
+router.get("/recommendation", recommendDiveSpot);
 
 export default router;

@@ -1,24 +1,27 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction} from "express";
+import { getRecommendedDiveSpot } from "../services/recommendationService";
+import logger from "../logger";
 
-export const getRecommendation = async (req: Request, res: Response) => {
-    try {
-        const recommendation = {
-            name: "Bondi Beach",
-            conditions: {
-                waveHeight: 1.5,
-                waterTemperature: 22,
-                windSpeed: 10,
-            },
-            description: "A fantastic dive spot with calm waters and great visibility today!",
-            location: {
-                latitude: -33.8915,
-                longitude: 151.2767,
-            },
-        };
 
-        res.json(recommendation);
-    } catch (error) {
-        console.error("Error generating recommendation:", error);
-        res.status(500).json({ message: "Internal server error" });
+export const recommendDiveSpot: (req: Request, res: Response) => void = 
+  (req, res) => {
+  
+  try {
+    logger.info("🔥 Route hit: /api/dive-spots/recommendation");
+
+    const location = req.query.location as string;
+    if (!location) {
+      logger.warn("⚠️ No location provided in request body");
+      return res.status(400).json({ success: false, message: "Location is required" });
     }
+
+    logger.info(`📍 Fetching recommendations for: ${location}`);
+    //const recommendedSpot = await getRecommendedDiveSpot(location);
+
+    return res.status(200).json({ success: true }); //, data: recommendedSpot });
+
+  } catch (error : any) {
+    logger.error(`❌ Error in recommendation controller: ${error.message}`);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
 };

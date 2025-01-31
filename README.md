@@ -8,6 +8,8 @@ The backend is built using Node.js and TypeScript, with Express.js for handling 
 
 Data about dive locations and conditions are persisted with PostgreSQL, using Knex.js for query building and db migrations
 
+It uses winston for logging
+
 ### dependencies
 
 ```
