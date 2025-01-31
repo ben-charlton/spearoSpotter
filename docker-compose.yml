@@ -20,18 +20,18 @@ services:
     depends_on:
       - backend
 
-#   db:
-#     image: postgres:15
-#     container_name: spearo-db
-#     restart: always
-#     environment:
-#       POSTGRES_USER: benc
-#       POSTGRES_PASSWORD: spearo
-#       POSTGRES_DB: spearo
-#     ports:
-#       - "5432:5432"
-#     volumes:
-#       - postgres_data:/var/lib/postgresql/data
+  db:
+    image: postgres:15
+    container_name: spearo-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_NAME}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-# volumes:
-#   postgres_data:
+volumes:
+  postgres_data:

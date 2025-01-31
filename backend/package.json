@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node server.ts"
+    "start": "ts-node server.ts",
+    "migrate:make": "knex migrate:make --knexfile=knex/knexfile.ts",
+    "migrate:latest": "knex migrate:latest --knexfile=knex/knexfile.ts",
+    "migrate:rollback": "knex migrate:rollback --knexfile=knex/knexfile.ts",
+    "seed:run" : "knex seed:run --knexfile=knex/knexfile.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +20,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "knex": "^3.1.0",
+    "node-fetch": "^3.3.2",
     "pg": "^8.13.1"
   },
   "devDependencies": {

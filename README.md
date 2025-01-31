@@ -6,13 +6,14 @@ SpearoSpotter is an app designed to help divers with recommendations on dive spo
 
 The backend is built using Node.js and TypeScript, with Express.js for handling HTTP requests. The backend is responsible for serving data to the frontend, as well as performing computations (like generating recommendations) based on real-time dive conditions.
 
-PostgreSQL and Prisma are used for database operations
+Data about dive locations and conditions are persisted with PostgreSQL, using Knex.js for query building and db migrations
 
 ### dependencies
 
 ```
 npm install express cors body-parser
 npm install --save-dev typescript ts-node @types/express @types/node @types/cors
+npm install knex pg
 ```
 
 ## Frontend
