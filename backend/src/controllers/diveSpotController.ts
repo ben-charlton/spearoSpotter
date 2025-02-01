@@ -1,11 +1,8 @@
-import { Request, Response, NextFunction} from "express";
+import { Request, Response } from "express";
 import { getRecommendedDiveSpot } from "../services/recommendationService";
 import logger from "../logger";
 
-
-export const recommendDiveSpot: (req: Request, res: Response) => void = 
-  (req, res) => {
-  
+export const recommendDiveSpot = async (req: Request, res: Response) => {
   try {
     logger.info("🔥 Route hit: /api/dive-spots/recommendation");
 
@@ -16,11 +13,11 @@ export const recommendDiveSpot: (req: Request, res: Response) => void =
     }
 
     logger.info(`📍 Fetching recommendations for: ${location}`);
-    //const recommendedSpot = await getRecommendedDiveSpot(location);
+    const recommendedSpot = await getRecommendedDiveSpot(location);
 
-    return res.status(200).json({ success: true }); //, data: recommendedSpot });
+    return res.status(200).json({ success: true, data: recommendedSpot });
 
-  } catch (error : any) {
+  } catch (error: any) {
     logger.error(`❌ Error in recommendation controller: ${error.message}`);
     return res.status(500).json({ success: false, message: "Server error" });
   }

@@ -31,7 +31,7 @@ export const calculateDiveScore = (diveSpot : any, realTimeData : any) => {
     return impact;
   };
   
-  const getWindImpact = (wind : any, facing_direction : any) => {
+  const getWindImpact = (wind : any, facing_direction : string) => {
     let impact = 0;
     if (wind.direction === facing_direction) {
       impact += wind.speed * 2; // Wind directly hitting the dive spot is worse

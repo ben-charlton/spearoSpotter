@@ -1,4 +1,4 @@
-//import { getRealTimeConditions } from "./apiService";
+import { getRealTimeConditions } from "./apiService";
 import { getAllDiveSpots } from "../models/diveSpotModel";
 import { calculateDiveScore } from "../recommendation/recommendationModel";
 
@@ -6,10 +6,10 @@ export const getRecommendedDiveSpot = async (location : string) => {
   
   try {
     
-    /*
     // 1. Fetch real-time weather and ocean conditions
     const realTimeData = await getRealTimeConditions(location);
 
+    /*
     // 2. Retrieve all dive spots from the database
     const diveSpots = await getAllDiveSpots();
 
@@ -25,7 +25,7 @@ export const getRecommendedDiveSpot = async (location : string) => {
     // 5. Return the best spot
     return scoredSpots.length > 0 ? scoredSpots[0] : null;
     */
-   return location;
+   return realTimeData;
 
   } catch (error) {
     console.error("Error in recommendation service:", error);
