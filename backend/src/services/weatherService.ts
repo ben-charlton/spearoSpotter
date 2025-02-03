@@ -1,3 +1,4 @@
+import { getConditionsByDay } from './../models/weatherModel';
 import fetch from "node-fetch";
 import db from "../../db"; 
 import logger  from "../logger"
@@ -26,9 +27,7 @@ export const getRealTimeConditions = async (location: string) => {
   try {
     
     logger.info("Attempting to get weather data from db");
-    const existingData = await db("weather_forecast")
-      .where("location", location)
-      .first();
+    const existingData = getConditionsByDay(location);
 
     if (existingData) {
       logger.info(`✅ Returning cached data for ${location}`);
@@ -56,9 +55,7 @@ export const getRealTimeConditions = async (location: string) => {
 
     await db("weather_forecast").insert(weatherData);
 
-    return await db("weather_forecast")
-      .where("location", location)
-      .first();
+    return getConditionsByDay(location);
 
   } catch (error) {
     console.error("Error fetching real-time conditions:", error);

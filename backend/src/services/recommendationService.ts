@@ -1,4 +1,4 @@
-import { getRealTimeConditions } from "./apiService";
+import { getRealTimeConditions } from "./weatherService";
 import { getAllDiveSpots } from "../models/diveSpotModel";
 import { calculateDiveScore } from "../recommendation/recommendationModel";
 import logger from "../logger";
