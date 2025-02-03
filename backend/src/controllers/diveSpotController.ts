@@ -15,7 +15,7 @@ export const recommendDiveSpot = async (req: Request, res: Response) => {
     logger.info(`📍 Fetching recommendations for: ${location}`);
     const recommendedSpot = await getRecommendedDiveSpot(location);
 
-    return res.status(200).json({ success: true, data: recommendedSpot });
+    return res.status(200).json({ data: recommendedSpot });
 
   } catch (error: any) {
     logger.error(`❌ Error in recommendation controller: ${error.message}`);

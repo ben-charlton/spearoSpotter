@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import db from "../../db"; 
 import logger  from "../logger"
-import { WeatherResponse } from "../types/weather";
+import { WeatherResponse, mapToDbRecord } from "../types/weather";
 
 
 const locationMap: Record<string, { lat: number; lng: number }> = {
@@ -28,7 +28,6 @@ export const getRealTimeConditions = async (location: string) => {
     logger.info("Attempting to get weather data from db");
     const existingData = await db("weather_forecast")
       .where("location", location)
-      //.andWhere("date", new Date().toISOString().split("T")[0]) 
       .first();
 
     if (existingData) {
@@ -52,23 +51,14 @@ export const getRealTimeConditions = async (location: string) => {
       latitude: coords.lat,
       longitude: coords.lng,
       forecast_time: new Date(hour.time),
-      air_temperature: hour.airTemperature.sg ?? null,
-      cloud_cover: hour.cloudCover.sg ?? null,
-      secondary_swell_direction: hour.secondarySwellDirection.sg ?? null,
-      secondary_swell_height: hour.secondarySwellHeight.sg ?? null,
-      secondary_swell_period: hour.secondarySwellPeriod.sg ?? null,
-      swell_direction: hour.swellDirection.sg ?? null,
-      swell_height: hour.swellHeight.sg ?? null,
-      swell_period: hour.swellPeriod.sg ?? null,
-      water_temperature: hour.waterTemperature.sg ?? null,
-      wave_height: hour.waveHeight.sg ?? null,
-      wind_direction: hour.windDirection.sg ?? null,
-      wind_speed: hour.windSpeed.sg ?? null,
+      ...mapToDbRecord(hour),
     }));
 
     await db("weather_forecast").insert(weatherData);
 
-    return response;
+    return await db("weather_forecast")
+      .where("location", location)
+      .first();
 
   } catch (error) {
     console.error("Error fetching real-time conditions:", error);
