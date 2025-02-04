@@ -1,11 +1,11 @@
 import db from "../../db"; 
 
-export const getConditionsByDay = async (location: string) => {
-    const today = new Date();
-    today.setUTCHours(12, 0, 0, 0); 
+export const getConditionsByDay = async (location: string, day : Date) => {
+    
+    day.setUTCHours(12, 0, 0, 0); 
   
     return await db("weather_forecast")
       .where("location", location)
-      .andWhere("forecast_time", today.toISOString())
+      .andWhere("forecast_time", day.toISOString())
       .first();
   };

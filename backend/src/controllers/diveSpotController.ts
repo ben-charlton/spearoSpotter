@@ -12,8 +12,20 @@ export const recommendDiveSpot = async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: "Location is required" });
     }
 
+    const dayString = req.query.day as string;
+    if (!dayString) {
+      logger.warn("⚠️ No day provided in request body");
+      return res.status(400).json({ success: false, message: "Day is required" });
+    }
+
+    const day = new Date(dayString);
+    if (isNaN(day.getTime())) {
+      logger.warn("⚠️ Invalid day provided in request body");
+      return res.status(400).json({ success: false, message: "Invalid date format" });
+    }
+
     logger.info(`📍 Fetching recommendations for: ${location}`);
-    const recommendedSpot = await getRecommendedDiveSpot(location);
+    const recommendedSpot = await getRecommendedDiveSpot(location, day);
 
     return res.status(200).json({ data: recommendedSpot });
 

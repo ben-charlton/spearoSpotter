@@ -24,6 +24,8 @@ The frontend is built using React and TypeScript, and bundled using [Vite](https
 
 Nginx is used to serve the build.
 
+UI is styled with mui - check it out on https://codesandbox.io/p/sandbox/spearospotter-dlyxkj
+
 ### dependencies
 ```
 npm install vite @vitejs/plugin-react typescript --save-dev

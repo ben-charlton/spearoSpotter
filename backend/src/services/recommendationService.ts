@@ -5,11 +5,11 @@ import logger from "../logger";
 import { WeatherDbRecord } from "../types/weather";
 import { DiveSpot } from "../types/spot";
 
-export const getRecommendedDiveSpot = async (location : string) => {
+export const getRecommendedDiveSpot = async (location : string, date : Date) => {
   
   try {
     
-    const realTimeData : WeatherDbRecord = await getRealTimeConditions(location);
+    const realTimeData : WeatherDbRecord = await getRealTimeConditions(location, date);
     const diveSpots : DiveSpot[] = await getAllDiveSpots();
 
     const scoredSpots = diveSpots.map(location => {

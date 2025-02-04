@@ -14,7 +14,7 @@ export const getCoordinates = (location: string) => {
   return locationMap[lowerCaseLocation] || null; 
 };
 
-export const getRealTimeConditions = async (location: string) => {
+export const getRealTimeConditions = async (location: string, date : Date) => {
   
   const coords = getCoordinates(location);
   const params = "cloudCover,waveHeight,airTemperature,swellDirection,swellHeight,swellPeriod,secondarySwellPeriod,secondarySwellDirection,secondarySwellHeight,waterTemperature,windDirection,windSpeed";
@@ -27,7 +27,7 @@ export const getRealTimeConditions = async (location: string) => {
   try {
     
     logger.info("Attempting to get weather data from db");
-    const existingData = getConditionsByDay(location);
+    const existingData = getConditionsByDay(location, date);
 
     if (existingData) {
       logger.info(`✅ Returning cached data for ${location}`);
@@ -55,7 +55,7 @@ export const getRealTimeConditions = async (location: string) => {
 
     await db("weather_forecast").insert(weatherData);
 
-    return getConditionsByDay(location);
+    return getConditionsByDay(location, date);
 
   } catch (error) {
     console.error("Error fetching real-time conditions:", error);
