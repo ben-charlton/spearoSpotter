@@ -14,7 +14,7 @@ export const getCoordinates = (location: string) => {
   return locationMap[lowerCaseLocation] || null; 
 };
 
-export const getRealTimeConditions = async (location: string, date : Date) => {
+export const getWeatherData = async (location: string, date : Date) => {
   
   const coords = getCoordinates(location);
   const params = "cloudCover,waveHeight,airTemperature,swellDirection,swellHeight,swellPeriod,secondarySwellPeriod,secondarySwellDirection,secondarySwellHeight,waterTemperature,windDirection,windSpeed";

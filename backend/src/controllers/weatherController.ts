@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import logger from "../logger";
-import { getRealTimeConditions } from "../services/weatherService";
+import { getWeatherData } from "../services/weatherService";
 
 export const getConditions = async (req: Request, res: Response) => {
   try {
@@ -25,7 +25,7 @@ export const getConditions = async (req: Request, res: Response) => {
     }
 
     logger.info(`📍 Fetching conditions for: ${location}`);
-    const conditions = await getRealTimeConditions(location, day);
+    const conditions = await getWeatherData(location, day);
 
     return res.status(200).json({ data: conditions });
 

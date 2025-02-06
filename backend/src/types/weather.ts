@@ -24,7 +24,7 @@ export interface WeatherMetric {
       hours: WeatherHour[];
   }
   
-  export interface WeatherDbRecord {
+  export interface WeatherRecord {
     time: string;
     air_temperature: number;
     cloud_cover: number;
@@ -40,7 +40,7 @@ export interface WeatherMetric {
     wind_speed: number;
   }
   
-  export const mapToDbRecord = (data: WeatherHour): WeatherDbRecord => ({
+  export const mapToDbRecord = (data: WeatherHour): WeatherRecord => ({
     time: data.time,
     air_temperature: data.airTemperature.sg ?? 0,
     cloud_cover: data.cloudCover.sg ?? 0,

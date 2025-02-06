@@ -8,4 +8,4 @@ export const getConditionsByDay = async (location: string, day : Date) => {
       .where("location", location)
       .andWhere("forecast_time", day.toISOString())
       .first();
-  };
+};
