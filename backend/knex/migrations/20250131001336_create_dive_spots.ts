@@ -7,11 +7,12 @@ export async function up(knex: Knex): Promise<void> {
       table.float("latitude").notNullable();
       table.float("longitude").notNullable();
       table.float("facing_direction");
-      table.string("protected_from");
+      table.float("protected_from");
       table.float("swell_sensitivity");
       table.float("wind_sensitivity");
       table.float("tide_sensitivity");
       table.float("refraction_sensitivity");
+      table.enu("best_at", ["high", "low"]);
       table.text("description");
       table.integer("depth", 50);
       table.text("entrance");

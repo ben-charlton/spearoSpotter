@@ -29,7 +29,7 @@ export const getTideData  = async (location: string, date : Date) : Promise<Tide
     const existingData = await getTidesForDateAtLocation(date, location);
 
     if (existingData) {
-      logger.info(`✅ Returning cached tide data for ${location} - ${existingData}`);
+      logger.info(`✅ Returning cached tide data for ${location}`);
       return existingData; 
     }
 

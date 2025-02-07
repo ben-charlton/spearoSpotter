@@ -1,7 +1,7 @@
 import db from "../../db"; 
 
 export const getAllDiveSpots = async () => {
-  return await db("dive_spots").select("id", "name", "latitude", "longitude", "facing_direction", "swell_sensitivity", "wind_sensitivity", "tide_sensitivity", "refraction_sensitivity", "depth", "description", "entrance");
+  return await db("dive_spots").select("*");
 };
 
 export const getDiveSpotById = async (id: number) => {

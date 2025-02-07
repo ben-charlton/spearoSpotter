@@ -9,6 +9,7 @@ export interface DiveSpot {
     wind_sensitivity: number;
     tide_sensitivity: number;
     refraction_sensitivity: number;
+    best_at: string;
     description: string | null;
     depth: number | null;
     entrance: string | null;
