@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import logger from "../logger";
 import { getWeatherData } from "../services/weatherService";
+import redisClient from "../redisClient";
 
 export const getConditions = async (req: Request, res: Response) => {
   try {
@@ -25,7 +26,19 @@ export const getConditions = async (req: Request, res: Response) => {
     }
 
     logger.info(`📍 Fetching conditions for: ${location}`);
+
+    const cacheKey = `conditions:${location}:${day}`;
+    const cachedData = await redisClient.get(cacheKey);
+    if (cachedData) {
+      console.log("🚀 Returning cached weather");
+      return res.status(200).json({ data: JSON.parse(cachedData) });
+    }
+
     const conditions = await getWeatherData(location, day);
+
+    await redisClient.set(cacheKey, JSON.stringify(conditions), {
+      EX: 21600, 
+    });
 
     return res.status(200).json({ data: conditions });
 

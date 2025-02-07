@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { getRecommendedDiveSpot } from "../services/recommendationService";
+import redisClient from "../redisClient";
 import logger from "../logger";
 
 export const recommendDiveSpot = async (req: Request, res: Response) => {
@@ -24,8 +25,21 @@ export const recommendDiveSpot = async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: "Invalid date format" });
     }
 
+
     logger.info(`📍 Fetching recommendations for: ${location}`);
+
+    const cacheKey = `recommendation:${location}:${day}`;
+    const cachedData = await redisClient.get(cacheKey);
+    if (cachedData) {
+      console.log("🚀 Returning cached recommendation");
+      return res.status(200).json({ data: JSON.parse(cachedData) });
+    }
+
     const recommendedSpot = await getRecommendedDiveSpot(location, day);
+
+    await redisClient.set(cacheKey, JSON.stringify(recommendedSpot), {
+      EX: 21600, 
+    });
 
     return res.status(200).json({ data: recommendedSpot });
 
