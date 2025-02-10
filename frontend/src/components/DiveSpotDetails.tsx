@@ -1,5 +1,5 @@
 import { JSX, useEffect, useState } from "react";
-import { Box, Card, CardContent, Typography, Select, MenuItem, FormControl,InputLabel, } from "@mui/material";
+import { Box, Container, Divider, Typography, Select, MenuItem, FormControl } from "@mui/material";
 
 const DiveSpotDetails: () => JSX.Element = () => {
 
@@ -51,6 +51,148 @@ const DiveSpotDetails: () => JSX.Element = () => {
     }
 
     return (
+        <Container
+        maxWidth={false}
+        sx={{
+          minHeight: "100vh",
+          py: 5,
+          px: 10,
+          background: "#eef1f6",
+          fontFamily: "Inter, sans-serif",
+        }}
+        >
+        {/* Date Selection Section */}
+        <Box
+          sx={{ maxWidth: "600px", margin: "0 auto 40px", textAlign: "center" }}
+        >
+          <Typography variant="h4" fontWeight={700} gutterBottom color="#1f2937">
+            Choose Your Dive Date
+          </Typography>
+          <FormControl fullWidth>
+            <Select
+              value={selectedDate}
+              onChange={(event) => setSelectedDate(event.target.value)}
+              displayEmpty
+              sx={{ background: "#ffffff", borderRadius: "8px" }}
+            >
+              {dateOptions.map((date) => (
+                <MenuItem key={date} value={date}>
+                  {date}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        {/* Recommendation Section */}
+        <Box sx={{ textAlign: "center", mb: 4 }}>
+          <Typography variant="h5" fontWeight={700} gutterBottom color="#1f2937">
+            Recommended Dive Spot
+          </Typography>
+        </Box>
+
+        {/* Map Section */}
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+          {recommendation ? (
+            <iframe
+              src={`https://www.google.com/maps?q=${recommendation.latitude},${recommendation.longitude}&z=15&output=embed`}
+              title="Dive Spot Map"
+              width="80%"
+              height="400"
+              style={{
+                borderRadius: "12px",
+                border: "none",
+                boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+              }}
+            ></iframe>
+          ) : (
+            <Typography>No map data available.</Typography>
+          )}
+        </Box>
+
+        {/* Dive Details */}
+        <Box
+          sx={{
+            maxWidth: "900px",
+            margin: "0 auto",
+            textAlign: "left",
+            background: "#ffffff",
+            padding: "24px",
+            borderRadius: "12px",
+            boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+          }}
+        >
+          <Typography variant="h4" fontWeight={600} gutterBottom color="#1f2937">
+            Dive Site Information
+          </Typography>
+          <Divider sx={{ my: 2 }} />
+          <Typography
+            variant="h5"
+            fontWeight={700}
+            sx={{ mb: 1 }}
+            color="#374151"
+          >
+            {recommendation?.name}
+          </Typography>
+          <Typography variant="body1" color="#6b7280" sx={{ mb: 3 }}>
+            {recommendation?.description}
+          </Typography>
+
+          {/* Weather & Conditions */}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: 3,
+            }}
+          >
+            {[
+              { label: "Wave Height", value: `${weather?.wave_height} m` },
+              { label: "Swell Direction", value: `${weather?.swell_direction}°` },
+              { label: "Swell Period", value: `${weather?.swell_period} sec` },
+              { label: "Wind Speed", value: `${weather?.wind_speed} km/hr` },
+              { label: "Wind Direction", value: `${weather?.wind_direction}°` },
+              { label: "Water Temp", value: `${weather?.water_temperature}°C` },
+              { label: "Cloud Cover", value: `${weather?.cloud_cover}%` },
+            ].map((item, index) => (
+              <Box
+                key={index}
+                sx={{
+                  padding: 3,
+                  background: "#f9fafb",
+                  borderRadius: 3,
+                  boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
+                  transition: "all 0.3s",
+                  "&:hover": { background: "#e5e7eb", transform: "scale(1.05)" },
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  fontWeight={700}
+                  gutterBottom
+                  color="#374151"
+                >
+                  {item.label}
+                </Typography>
+                <Typography variant="body1" color="#6b7280">
+                  {item.value}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+        </Container>
+      );
+};
+
+
+
+
+export default DiveSpotDetails;
+
+
+
+/*
         <Box
           sx={{
             display: "flex",
@@ -155,8 +297,5 @@ const DiveSpotDetails: () => JSX.Element = () => {
             </CardContent>
           </Card>
         </Box>
-      );
-};
 
-
-export default DiveSpotDetails;
+*/

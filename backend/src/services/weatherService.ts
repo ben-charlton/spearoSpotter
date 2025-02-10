@@ -27,7 +27,7 @@ export const getWeatherData = async (location: string, date : Date) => {
   try {
     
     logger.info("Attempting to get weather data from db");
-    const existingData = getConditionsByDay(location, date);
+    const existingData = await getConditionsByDay(location, date);
 
     if (existingData) {
       logger.info(`✅ Returning cached data for ${location}`);
@@ -53,9 +53,27 @@ export const getWeatherData = async (location: string, date : Date) => {
       ...mapToDbRecord(hour),
     }));
 
-    await db("weather_forecast").insert(weatherData);
+    await db("weather_forecast")
+      .insert(weatherData)
+      .onConflict(["location", "forecast_time"])
+      .merge({
+        air_temperature: db.raw("excluded.air_temperature"),
+        cloud_cover: db.raw("excluded.cloud_cover"),
+        latitude: db.raw("excluded.latitude"),
+        longitude: db.raw("excluded.longitude"),
+        secondary_swell_direction: db.raw("excluded.secondary_swell_direction"),
+        secondary_swell_height: db.raw("excluded.secondary_swell_height"),
+        secondary_swell_period: db.raw("excluded.secondary_swell_period"),
+        swell_direction: db.raw("excluded.swell_direction"),
+        swell_height: db.raw("excluded.swell_height"),
+        swell_period: db.raw("excluded.swell_period"),
+        water_temperature: db.raw("excluded.water_temperature"),
+        wave_height: db.raw("excluded.wave_height"),
+        wind_direction: db.raw("excluded.wind_direction"),
+        wind_speed: db.raw("excluded.wind_speed"),
+      });
 
-    return getConditionsByDay(location, date);
+    return await getConditionsByDay(location, date);
 
   } catch (error) {
     console.error("Error fetching real-time conditions:", error);

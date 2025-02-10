@@ -40,8 +40,7 @@ export interface WeatherMetric {
     wind_speed: number;
   }
   
-  export const mapToDbRecord = (data: WeatherHour): WeatherRecord => ({
-    time: data.time,
+  export const mapToDbRecord = (data: WeatherHour): Omit<WeatherRecord, "time"> => ({
     air_temperature: data.airTemperature.sg ?? 0,
     cloud_cover: data.cloudCover.sg ?? 0,
     secondary_swell_direction: data.secondarySwellDirection.sg ?? 0,

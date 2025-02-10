@@ -2,7 +2,7 @@ import db from "../../db";
 
 export const getConditionsByDay = async (location: string, day : Date) => {
     
-    day.setUTCHours(12, 0, 0, 0); 
+    day.setUTCHours(7, 0, 0, 0); 
   
     return await db("weather_forecast")
       .where("location", location)
