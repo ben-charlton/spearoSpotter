@@ -1,5 +1,19 @@
 import { JSX, useEffect, useState } from "react";
-import { Box, Container, Divider, Typography, Select, MenuItem, FormControl } from "@mui/material";
+import { Box, Container, Divider, Typography, Select, MenuItem, FormControl, createTheme, ThemeProvider } from "@mui/material";
+
+//const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = "https://spearospotter.online";
+
+const theme = createTheme({
+  typography: {
+    fontFamily: "Inter, sans-serif",
+    h6: {
+      fontWeight: 400,
+      fontSize: "1.5rem",
+      color: "#C0392B",
+    },
+  },
+});
 
 const DiveSpotDetails: () => JSX.Element = () => {
 
@@ -18,13 +32,15 @@ const DiveSpotDetails: () => JSX.Element = () => {
     const fetchRecommendation = async (selectedDate : Date) => {
         setLoading(true);
         try {
-          console.log(`day selected is ${selectedDate}`);
+          console.log(`Day selected is ${selectedDate}`);
           selectedDate.setUTCHours(12, 0, 0, 0); 
-          const recoResponse = await fetch(`http://localhost:5000/api/dive-spots/recommendation?location=sydney&day=${selectedDate.toISOString()}`);
+          const recoResponse = await fetch(`${API_BASE_URL}/api/dive-spots/recommendation?location=sydney&day=${selectedDate.toISOString()}`);
           const data = await recoResponse.json();
+          console.log("Recommendation data is", data);
           
-          const weatherResponse = await fetch(`http://localhost:5000/api/weather/conditions?location=sydney&day=${selectedDate.toISOString()}`);
+          const weatherResponse = await fetch(`${API_BASE_URL}/api/weather/conditions?location=sydney&day=${selectedDate.toISOString()}`);
           const weatherData = await weatherResponse.json();
+          console.log("Weather data is", weatherData);
     
           setRecommendation(data.data);
           setWeather(weatherData.data);
@@ -51,21 +67,39 @@ const DiveSpotDetails: () => JSX.Element = () => {
     }
 
     return (
-        <Container
-        maxWidth={false}
+        <ThemeProvider theme={theme}>
+    {/* Full-viewport background */}
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background: "#f5f5f5", // Full background now
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        px: { xs: 2, md: 10 }, // Responsive padding
+        py: { xs: 3, md: 5 },
+      }}
+    >
+      {/* Centered content box */}
+      <Container
+        maxWidth="sm"
         sx={{
-          minHeight: "100vh",
-          py: 5,
-          px: 10,
-          background: "#eef1f6",
+          width: "100%",
           fontFamily: "Inter, sans-serif",
+          color: "#2d2d2d",
         }}
-        >
-        {/* Date Selection Section */}
-        <Box
-          sx={{ maxWidth: "600px", margin: "0 auto 40px", textAlign: "center" }}
-        >
-          <Typography variant="h4" fontWeight={700} gutterBottom color="#1f2937">
+      >
+        {/* Title & Date Selection */}
+        <Box sx={{ textAlign: "center", mb: 3 }}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 700,
+              letterSpacing: "0.5px",
+              color: "#2d2d2d",
+              fontSize: { xs: "24px", md: "32px" },
+            }}
+          >
             Choose Your Dive Date
           </Typography>
           <FormControl fullWidth>
@@ -73,7 +107,12 @@ const DiveSpotDetails: () => JSX.Element = () => {
               value={selectedDate}
               onChange={(event) => setSelectedDate(event.target.value)}
               displayEmpty
-              sx={{ background: "#ffffff", borderRadius: "8px" }}
+              sx={{
+                background: "#ffffff",
+                borderRadius: "8px",
+                color: "#2d2d2d",
+                fontSize: { xs: "14px", md: "16px" },
+              }}
             >
               {dateOptions.map((date) => (
                 <MenuItem key={date} value={date}>
@@ -84,65 +123,65 @@ const DiveSpotDetails: () => JSX.Element = () => {
           </FormControl>
         </Box>
 
-        {/* Recommendation Section */}
-        <Box sx={{ textAlign: "center", mb: 4 }}>
-          <Typography variant="h5" fontWeight={700} gutterBottom color="#1f2937">
-            Recommended Dive Spot
-          </Typography>
-        </Box>
-
         {/* Map Section */}
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
           {recommendation ? (
             <iframe
               src={`https://www.google.com/maps?q=${recommendation.latitude},${recommendation.longitude}&z=15&output=embed`}
               title="Dive Spot Map"
-              width="80%"
-              height="400"
+              width="100%"
+              height="300"
               style={{
                 borderRadius: "12px",
                 border: "none",
-                boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+                maxWidth: "600px",
               }}
             ></iframe>
           ) : (
-            <Typography>No map data available.</Typography>
+            <Typography color="#C0392B">No map data available.</Typography>
           )}
         </Box>
 
-        {/* Dive Details */}
+        {/* Dive Site Information */}
         <Box
           sx={{
-            maxWidth: "900px",
-            margin: "0 auto",
-            textAlign: "left",
-            background: "#ffffff",
-            padding: "24px",
+            background: "#ffffff", // White box for content
+            padding: { xs: "16px", md: "24px" },
             borderRadius: "12px",
-            boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.05)", // Soft shadow for depth
           }}
         >
-          <Typography variant="h4" fontWeight={600} gutterBottom color="#1f2937">
+          <Typography
+            variant="h4"
+            fontWeight={600}
+            gutterBottom
+            color="#2d2d2d"
+            sx={{ fontSize: { xs: "22px", md: "28px" } }}
+          >
             Dive Site Information
           </Typography>
-          <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: 2, background: "#C0392B" }} />
           <Typography
             variant="h5"
             fontWeight={700}
-            sx={{ mb: 1 }}
-            color="#374151"
+            sx={{ mb: 1, fontSize: { xs: "18px", md: "24px" } }}
+            color="#C0392B"
           >
             {recommendation?.name}
           </Typography>
-          <Typography variant="body1" color="#6b7280" sx={{ mb: 3 }}>
+          <Typography
+            variant="body1"
+            color="#6b7280"
+            sx={{ mb: 3, fontSize: { xs: "14px", md: "16px" } }}
+          >
             {recommendation?.description}
           </Typography>
 
-          {/* Weather & Conditions */}
+          {/* Grid for Weather Data */}
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
               gap: 3,
             }}
           >
@@ -158,144 +197,37 @@ const DiveSpotDetails: () => JSX.Element = () => {
               <Box
                 key={index}
                 sx={{
-                  padding: 3,
+                  padding: 2,
                   background: "#f9fafb",
                   borderRadius: 3,
-                  boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
                   transition: "all 0.3s",
-                  "&:hover": { background: "#e5e7eb", transform: "scale(1.05)" },
                 }}
               >
                 <Typography
                   variant="body1"
                   fontWeight={700}
                   gutterBottom
-                  color="#374151"
+                  color="#2d2d2d"
+                  sx={{ fontSize: { xs: "14px", md: "16px" } }}
                 >
                   {item.label}
                 </Typography>
-                <Typography variant="body1" color="#6b7280">
+                <Typography
+                  variant="body1"
+                  color="#6b7280"
+                  sx={{ fontSize: { xs: "14px", md: "16px" } }}
+                >
                   {item.value}
                 </Typography>
               </Box>
             ))}
           </Box>
         </Box>
-        </Container>
+      </Container>
+    </Box>
+  </ThemeProvider>
       );
 };
 
 
-
-
 export default DiveSpotDetails;
-
-
-
-/*
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column", 
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "100vh",
-            backgroundColor: "#f5f5f5",
-            gap: 2, 
-          }}
-        >
-
-        <Card sx={{ maxWidth: 400, width: "100%", boxShadow: 3 }}>
-          <CardContent>
-            <Typography variant="h5" align="center" gutterBottom>
-                Select a Dive Date
-            </Typography>
-
-            <FormControl fullWidth>
-                <InputLabel></InputLabel>
-                <Select
-                value={selectedDate}
-                onChange={(event) => setSelectedDate(event.target.value)}
-                displayEmpty
-                >
-                {dateOptions.map((date) => (
-                    <MenuItem key={date} value={date}>
-                    {date}
-                    </MenuItem>
-                ))}
-                </Select>
-            </FormControl>
-            </CardContent>
-          </Card>
-
-          <Card sx={{ maxWidth: 400, margin: '20px', boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h5" component="h2" align="center" gutterBottom>
-                Recommended Dive Site for {selectedDate}
-              </Typography>
-    
-              <Box display="flex" justifyContent="center" marginBottom="16px">
-
-                {recommendation ? (
-                  <iframe
-                    src={`https://www.google.com/maps?q=${recommendation.latitude},${recommendation.longitude}&z=15&output=embed`}
-                    title="Dive Spot Map"
-                    width="100%"
-                    height="200"
-                    style={{ borderRadius: '8px' }}
-                  ></iframe>
-                ) : (
-                  <Typography>No map data available.</Typography>
-                )}
-              </Box>
-    
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="body1" fontWeight="bold">Name:</Typography>
-                  <Typography variant="body1">{recommendation.name}</Typography>
-                </Box>
-    
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="body1" fontWeight="bold">Wave Height:</Typography>
-                  <Typography variant="body1">{weather.wave_height} m</Typography>
-                </Box>
-
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="body1" fontWeight="bold">Swell Direction:</Typography>
-                  <Typography variant="body1">{weather.swell_direction} °</Typography>
-                </Box>
-
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="body1" fontWeight="bold">Swell Period:</Typography>
-                  <Typography variant="body1">{weather.swell_period} seconds</Typography>
-                </Box>
-
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="body1" fontWeight="bold">Wind Speed:</Typography>
-                  <Typography variant="body1">{weather.wind_speed} km/hr</Typography>
-                </Box>
-
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="body1" fontWeight="bold">Wind Direction:</Typography>
-                  <Typography variant="body1">{weather.wind_direction} °</Typography>
-                </Box>
-    
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="body1" fontWeight="bold">Water Temp:</Typography>
-                  <Typography variant="body1">{weather.water_temperature} °C</Typography>
-                </Box>
-    
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="body1" fontWeight="bold">Cloud Cover:</Typography>
-                  <Typography variant="body1">{weather.cloud_cover} %</Typography>
-                </Box>
-              </Box>
-    
-              <Typography variant="body2" color="textSecondary" align="center" marginTop="16px">
-                {recommendation.description}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Box>
-
-*/

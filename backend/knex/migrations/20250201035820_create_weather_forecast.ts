@@ -21,6 +21,7 @@ export async function up(knex: Knex): Promise<void> {
         table.float("water_temperature");
         table.float("wind_direction");
         table.float("wind_speed");
+        table.unique(["location", "forecast_time"]);
       });
     }
 

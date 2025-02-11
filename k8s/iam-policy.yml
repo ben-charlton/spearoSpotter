@@ -1,0 +1,14 @@
+bindings:
+  - role: roles/cloudbuild.builds.editor
+    members:
+      - user:benrcharltonn@gmail.com
+
+  - role: roles/storage.admin
+    members:
+      - user:benrcharltonn@gmail.com
+
+  - role: roles/artifactregistry.admin
+    members:
+      - user:benrcharltonn@gmail.com
+
+# for ref - cmd to apply is gcloud projects set-iam-policy possible-tape-450509-e4 iam-policy.yml

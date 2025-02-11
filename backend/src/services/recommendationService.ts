@@ -12,13 +12,13 @@ export const getRecommendedDiveSpot = async (location : string, date : Date) => 
     const diveSpots = await getAllDiveSpots();
     const tideData = await getTideData(location, date);
 
-    if (tideData === null) {
+    if (!tideData || Object.keys(tideData).length === 0) {
       throw new Error("No tide data found");
     }
-    if (diveSpots === null) {
+    if (!diveSpots || Object.keys(diveSpots).length === 0) {
       throw new Error("No dive spot data found");
     }
-    if (weatherData === null) {
+    if (!weatherData || Object.keys(weatherData).length === 0) {
       throw new Error("No weather data found");
     }
 
