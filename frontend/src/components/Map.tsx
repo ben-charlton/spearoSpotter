@@ -1,8 +1,9 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
+import { Recommendation } from "../types/dive";
 
 type MapProps = {
   loading: boolean;
-  recommendation: { latitude: number; longitude: number } | null;
+  recommendation: Recommendation | null;
 };
 
 const Map = ({ loading, recommendation }: MapProps) => (

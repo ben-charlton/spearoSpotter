@@ -4,30 +4,13 @@ import DateSelection from "../components/DateSelection";
 import Description from "../components/Description";
 import Map from "../components/Map";
 import DiveDetails from "../components/DiveDetails";
+import { Weather, Recommendation } from "../types/dive";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const theme = createTheme({
   typography: { fontFamily: "Inter, sans-serif", h6: { fontWeight: 400, fontSize: "1.5rem", color: "#C0392B" } },
 });
-
-interface Recommendation {
-  id: number;
-  name: string;
-  description: string;
-  latitude: number;
-  longitude: number;
-}
-
-interface Weather {
-  wave_height: number;
-  swell_direction: number;
-  swell_period: number;
-  wind_speed: number;
-  wind_direction: number;
-  water_temperature: number;
-  cloud_cover: number;
-}
 
 const getFormattedDate = (offset: number = 0): string => {
   const date = new Date();
