@@ -1,6 +1,6 @@
 # SpearoSpotter
 
-🚀 **Live Demo:** [SpearoSpotter](https://spearospotter.online/)
+🚀 **Visit the site in production:** [SpearoSpotter](https://spearospotter.online/)
 
 SpearoSpotter is a full‐stack web application that provides divers with **real‐time recommendations** for the best dive spots based on weather and water conditions. The app analyzes factors such as **wave height/directions, wind speed/directions, and tide levels** to determine the most suitable diving locations.
 
@@ -51,7 +51,7 @@ The application is deployed on **Google Kubernetes Engine (GKE)**. Both the fron
 
 ## Running Locally
 
-For local development, the application is built and run using Docker Compose. To build and run the app locally, execute:
+For local development, the application is built and run using Docker Compose and orchestrated via Make. To build and run the app locally, execute:
 
 ```sh
 make local_build
