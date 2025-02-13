@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import DiveSpotDetails from './components/DiveSpotDetails';
+import DiveSpotDetails from './pages/DivePage';
 
 const App: () => JSX.Element = () => {
   return (
