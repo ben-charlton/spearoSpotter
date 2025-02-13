@@ -1,0 +1,15 @@
+FROM node:18
+
+WORKDIR /app
+
+ENV NODE_ENV=development
+
+COPY backend/package*.json ./
+
+RUN npm install --ignore-scripts && npm install esbuild --no-save
+
+COPY backend .
+
+EXPOSE 5000
+
+CMD ["npm", "start"]

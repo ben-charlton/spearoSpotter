@@ -4,12 +4,16 @@ PROJECT_ID=possible-tape-450509-e4
 FRONTEND_IMAGE=gcr.io/$(PROJECT_ID)/spearo-frontend
 BACKEND_IMAGE=gcr.io/$(PROJECT_ID)/spearo-backend
 
+local_build:
+	docker-compose --env-file .env.local up --build
+
 build_and_publish_frontend:
 	cd frontend && \
-	gcloud builds submit --tag gcr.io/possible-tape-450509-e4/spearo-frontend
+	gcloud builds submit --config cloudbuild.yml --substitutions=_VITE_API_BASE_URL="https://spearospotter.online"
 
 build_and_publish_backend:
-	cd backend && docker buildx build --platform linux/amd64 -t $(BACKEND_IMAGE) . && docker push $(BACKEND_IMAGE)
+	cd backend && \
+	docker buildx build --platform linux/amd64 -t $(BACKEND_IMAGE) --push .
 
 redeploy_all:
 	cd k8s && \

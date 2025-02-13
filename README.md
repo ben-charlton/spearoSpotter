@@ -1,37 +1,59 @@
 # SpearoSpotter
 
-SpearoSpotter is an app designed to help divers with recommendations on dive spots based on real-time weather and water conditions. It provides users with data on water visibility, temperature, wave height, wind speed, and other dive-related factors to help them plan their next dive. This app is built using a full-stack approach with a Node.js (TypeScript) backend and a React frontend
+🚀 **Live Demo:** [SpearoSpotter](https://spearospotter.online/)
 
-## Backend 
+SpearoSpotter is a full‐stack web application that provides divers with **real‐time recommendations** for the best dive spots based on weather and water conditions. The app analyzes factors such as **wave height/directions, wind speed/directions, and tide levels** to determine the most suitable diving locations.
 
-The backend is built using Node.js and TypeScript, with Express.js for handling HTTP requests. The backend is responsible for serving data to the frontend, as well as performing computations (like generating recommendations) based on real-time dive conditions.
+---
 
-Data about dive locations and conditions are persisted with PostgreSQL, using Knex.js for query building and db migrations
+## How It Works
 
-It uses winston for logging
+SpearoSpotter calculates a **diveability score** for dive spots around Sydney by evaluating:
 
-### dependencies
+1. **Swell Impact**  
+   - Computes wave power using **primary and secondary swell data**.  
+   - Adjusts for **angle differences** between the swell direction and the dive site’s orientation using exponential decay functions, reflecting the diminishing impact as the angle deviates from head-on.  
+   - Considers the interaction between primary and secondary swells, applying a small penalty for large angular differences.
 
+2. **Wind Impact**  
+   - Analyzes the wind’s direction relative to the dive spot’s protected angle.  
+   - Applies an exponential penalty when wind shifts from a protected to an unprotected angle, increasing the exposure penalty as the deviation grows.
+
+3. **Tide Impact**  
+   - Selects the tide event closest to the expected dive time (e.g., dives typically occurring at 7 AM).  
+   - Sites are prioritized based on how significantly the tide influences local conditions.
+
+4. **Refraction Impact**  
+   - Evaluates the difference between the swell direction and the spot’s facing direction.  
+   - A more direct swell (closer to the spot’s facing direction) yields a greater impact.
+
+---
+
+## Tech Stack
+
+### Backend (Node.js, TypeScript, Express)
+- **REST API:** Serves dive recommendations and real-time condition data.
+- **PostgreSQL:** Stores dive spot and weather condition data.
+- **Knex.js:** Manages database operations.
+- **Redis:** Caches API responses for faster response times.
+
+### Frontend (React, TypeScript, Vite)
+- **Material UI (MUI):** Used for styling.
+- **Nginx:** Serves the pre-built static files.
+
+---
+
+## Deployment
+
+The application is deployed on **Google Kubernetes Engine (GKE)**. Both the frontend and backend are containerized and built using Cloud Build/Docker and exposed via an Ingress. A domain I own is then resolved to this Ingress.
+
+---
+
+## Running Locally
+
+For local development, the application is built and run using Docker Compose. To build and run the app locally, execute:
+
+```sh
+make local_build
 ```
-npm install express cors body-parser
-npm install --save-dev typescript ts-node @types/express @types/node @types/cors
-npm install knex pg
-```
-
-## Frontend
-
-The frontend is built using React and TypeScript, and bundled using [Vite](https://vite.dev/) for fast development and build times. Vite was chosen due to its performance improvements over traditional bundlers like Webpack. It supports modern TypeScript features and is highly optimized for fast development workflows.
-
-Nginx is used to serve the build.
-
-UI is styled with mui - check it out on https://codesandbox.io/p/sandbox/spearospotter-dlyxkj
-
-### dependencies
-```
-npm install vite @vitejs/plugin-react typescript --save-dev
-```
-
-## Spinning up the app 
-```
-docker-compose up --build
-```
+Then navigate to http://localhost:3000 in your browser.

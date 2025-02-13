@@ -2,25 +2,28 @@ version: '3.8'
 
 services:
   backend:
-    build: ./backend
+    build: 
+      context: .
+      dockerfile: backend/Dockerfile.local
     ports:
       - "5000:5000"
     depends_on:
       - db
       - cache
-    environment:
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_NAME}
-      - REDIS_URL=redis://cache:6379
     env_file:
-      - .env
+      - .env.local
   frontend:
-    build: ./frontend
+    build: 
+      context: .
+      dockerfile: frontend/Dockerfile.local
+      args: 
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
     ports:
       - "3000:80"
     depends_on:
       - backend
     env_file:
-      - .env
+      - .env.local
 
   db:
     image: postgres:15
@@ -35,7 +38,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
-      - .env
+      - .env.local
 
   cache:
     image: redis:latest
@@ -46,3 +49,5 @@ services:
 
 volumes:
   postgres_data:
+
+# Note - need to pass in the .env.local file to the compose command `docker-compose --env-file .env.local up --build`

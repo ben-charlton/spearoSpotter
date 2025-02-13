@@ -3,27 +3,6 @@ import { DiveSpot } from "../types/spot";
 import { TideRecord } from "../types/tide";
 import logger from "../logger";
 
-/*
-
-How is it calculated? 
-
-1. Swell Impact:
-- The impact that the swell will have on a location is calculated by determining the wave power of the primary and secondary swells, and then taking into account the directions of these
-in relation to the direction the location faces (using an exponential decay (Math.exp) for angle differences, as this helps to reflect the diminishing impact as the angle moves away from being head-on.
-Interaction between primary and secondary swells considers the relative angle between them, with a small penalty for large angle differences (i.e., if they are 90+ degrees apart).
-
-2. Wind Impact:
-- Wind impact scales both based on the protection angle and the distance from the facing direction. The exposure penalty increases exponentially as the wind moves from a protected angle to an unprotected one.
-The wind's relative direction to the spot’s facing direction is factored in with an exponential penalty (Math.pow), making the impact more sensitive as the direction deviates.
-
-3. Tide Impact:
-- We find the type of tide that is closest to the time of the dive (at the moment, expectation is that dives will occur at 7am). Higher tides have a greater impact at sites
-
-4. Refraction Impact:
-- Refraction effect uses a similar logic as the other factors but considers how much the swell direction differs from the spot's facing direction. This ensures the more direct the swell direction, the greater the effect.
-
-*/
-
 const calculateDirectionalImpact = (spotDirection: number, swellDirection: number) => {
   
   const angleDifference = Math.abs(spotDirection - swellDirection);

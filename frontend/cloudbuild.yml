@@ -1,0 +1,44 @@
+substitutions:
+  _VITE_API_BASE_URL: "https://spearospotter.online"
+
+steps:
+  - name: node:20
+    id: "Install Dependencies"
+    entrypoint: npm
+    args: ["install"]
+
+  - name: node:20
+    id: "Build Frontend"
+    env:
+      - "VITE_API_BASE_URL=${_VITE_API_BASE_URL}"
+    entrypoint: npm
+    args: ["run", "build"]
+
+  - name: gcr.io/cloud-builders/docker
+    id: "Build Docker Image"
+    args:
+      - "build"
+      - "--build-arg"
+      - "VITE_API_BASE_URL=${_VITE_API_BASE_URL}"
+      - "-t"
+      - "gcr.io/possible-tape-450509-e4/spearo-frontend:latest" 
+      - "-t"
+      - "gcr.io/possible-tape-450509-e4/spearo-frontend:$BUILD_ID"  
+      - "."
+
+  - name: gcr.io/cloud-builders/docker
+    id: "Push Docker Image"
+    args:
+      - "push"
+      - "gcr.io/possible-tape-450509-e4/spearo-frontend:latest"  
+
+  - name: gcr.io/cloud-builders/docker
+    id: "Push Tagged Image"
+    args:
+      - "push"
+      - "gcr.io/possible-tape-450509-e4/spearo-frontend:$BUILD_ID"  
+
+images:
+  - "gcr.io/possible-tape-450509-e4/spearo-frontend:latest"
+  - "gcr.io/possible-tape-450509-e4/spearo-frontend:$BUILD_ID"
+

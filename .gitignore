@@ -28,3 +28,6 @@ yarn-error.log*
 backend/logs/
 
 k8s/configmap.yml
+k8s/commands.txt
+
+build_logs*
